@@ -7,17 +7,17 @@ import java.util.List;
 public class Board {
 
     private ArrayList<Tile> board;
-    private int numOfRows;
     private int numOfColumns;
+    private int numOfRows;
     private int numOfTiles;
 
-    public Board(int numOfRows, int numOfColumns) {
-        this.numOfColumns = numOfColumns;
+    public Board(int numOfColumns, int numOfRows) {
         this.numOfRows = numOfRows;
-        numOfTiles = numOfRows * numOfColumns;
+        this.numOfColumns = numOfColumns;
+        numOfTiles = numOfColumns * numOfRows;
         this.board = new ArrayList<>();
         for (int i = 0; i < numOfTiles; i++) {
-            board.add(new Tile(numOfRows, numOfColumns));
+            board.add(new Tile(numOfColumns, numOfRows));
         }
     }
 
@@ -25,12 +25,12 @@ public class Board {
         return Collections.unmodifiableList(board);
     }
 
-    public int getNumOfRows() {
-        return numOfRows;
-    }
-
     public int getNumOfColumns() {
         return numOfColumns;
+    }
+
+    public int getNumOfRows() {
+        return numOfRows;
     }
 
     public int getNumOfTiles() {

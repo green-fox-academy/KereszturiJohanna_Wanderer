@@ -1,12 +1,10 @@
 package com.wanderer;
 
-import java.util.ArrayList;
-
 public class RandomLabyrinthGenerator {
 
     public static Board createLabyrinth(Board board) {
         int half = calculateHalf(board);
-        int first = board.getNumOfRows() + 1;
+        int first = board.getNumOfColumns() + 1;
 
         try {
 
@@ -61,9 +59,9 @@ public class RandomLabyrinthGenerator {
 
     static int calculateHalf(Board board){
         if (board.getBoard().size() / 2 == 0) {
-            return board.getNumOfColumns()/2;
+            return board.getNumOfRows()/2;
         } else {
-            return board.getNumOfColumns() / 2 + 1;
+            return board.getNumOfRows() / 2 + 1;
         }
     }
 

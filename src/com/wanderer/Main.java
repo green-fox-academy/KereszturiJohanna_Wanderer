@@ -4,30 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Objects;
 
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 
-public class Main extends JComponent implements KeyListener{
+public class Main extends JComponent implements KeyListener {
 
     public static Board board;
+    static int WIDTH;
+    static int HEIGHT;
 
-    public static void gameTable(Graphics graphics){
-        PositionedImage image = new PositionedImage("floor.png", 300, 300);
-        image.draw(graphics);
-
+    public static void gameTable(Graphics graphics) {
+        printBoard(board, graphics);
     }
 
-    public static void generateLabyrinth(){
-        board = new Board(12,12);
+    public static void generateLabyrinth() {
+        board = new Board(12, 12);
+        WIDTH = board.getNumOfColumns()*72;
+        HEIGHT = board.getNumOfRows()*72;
         RandomLabyrinthGenerator.createLabyrinth(board);
     }
 
-
-
-    static int WIDTH = 864;  // vászon szélessége
-    static int HEIGHT = 864; // vászon magassága
 
     public static void main(String[] args) {
         generateLabyrinth();
@@ -50,16 +47,22 @@ public class Main extends JComponent implements KeyListener{
         }
     }
 
-    public static void printBoardToConsole(Board board){
+    public static void printBoard(Board board, Graphics graphics) {
+        int posX = 0;
+        int posY = 0;
         for (Tile tile : board.getBoard()) {
-            if(tile.isWall()){
-                System.out.print("O");
-            }else{
-                System.out.print(" ");
+            if (tile.isWall()) {
+                PositionedImage image = new PositionedImage("wall.png", posX, posY);
+                image.draw(graphics);
+            } else {
+                PositionedImage image = new PositionedImage("floor.png", posX, posY);
+                image.draw(graphics);
             }
-            System.out.print("|");
-            if(tile.getId().y == board.getNumOfRows())
-                System.out.println();
+            posX += 72;
+            if (tile.getId().y == board.getNumOfColumns()) {
+                posY += 72;
+                posX = 0;
+            }
         }
     }
 
@@ -71,11 +74,11 @@ public class Main extends JComponent implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        // Húzni
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        // Ne engedd el
     }
 }
