@@ -17,8 +17,9 @@ public class Board {
         numOfTiles = numOfColumns * numOfRows;
         this.board = new ArrayList<>();
         for (int i = 0; i < numOfTiles; i++) {
-            board.add(new Tile(numOfColumns, numOfRows));
+            board.add(new Tile(numOfRows, numOfColumns));
         }
+        System.out.println();
     }
 
     public List<Tile> getBoard() {

@@ -20,8 +20,8 @@ public class Main extends JComponent implements KeyListener {
 
     public static void generateLabyrinth() {
         board = new Board(12, 12);
-        WIDTH = board.getNumOfColumns()*72;
-        HEIGHT = board.getNumOfRows()*72;
+        WIDTH = (board.getNumOfColumns()-2) * 72;
+        HEIGHT = (board.getNumOfRows()-2) * 72;
         RandomLabyrinthGenerator.createLabyrinth(board);
     }
 
@@ -51,6 +51,9 @@ public class Main extends JComponent implements KeyListener {
         int posX = 0;
         int posY = 0;
         for (Tile tile : board.getBoard()) {
+            if(tile.isEdge()){
+                continue;
+            }
             if (tile.isWall()) {
                 PositionedImage image = new PositionedImage("wall.png", posX, posY);
                 image.draw(graphics);
@@ -58,13 +61,14 @@ public class Main extends JComponent implements KeyListener {
                 PositionedImage image = new PositionedImage("floor.png", posX, posY);
                 image.draw(graphics);
             }
-            posX += 72;
-            if (tile.getId().y == board.getNumOfColumns()) {
-                posY += 72;
-                posX = 0;
+            posY += 72;
+            if (tile.getId().y == board.getNumOfRows()-1) {
+                posX += 72;
+                posY = 0;
             }
         }
     }
+
 
 
     @Override

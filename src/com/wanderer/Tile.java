@@ -27,6 +27,11 @@ public class Tile {
         if (id.x == 1 || id.y == 1 || id.x == numOfColumns || id.y == numOfRows){
             isEdge = true;
             isWall = true;
+//            if(id.y == numOfRows){
+//                isWall = false;
+//            }else{
+//                isWall = true;
+//            }
             isNothing = false;
             top = new Coordinates(0, 0);
             down = new Coordinates(0,0);
@@ -58,6 +63,10 @@ public class Tile {
 
     public boolean isWall() {
         return isWall;
+    }
+
+    public boolean isEdge() {
+        return isEdge;
     }
 
     public boolean isNothing() {

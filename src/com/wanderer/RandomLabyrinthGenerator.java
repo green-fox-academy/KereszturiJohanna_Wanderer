@@ -3,8 +3,7 @@ package com.wanderer;
 public class RandomLabyrinthGenerator {
 
     public static Board createLabyrinth(Board board) {
-        int half = calculateHalf(board);
-        int first = board.getNumOfColumns() + 1;
+        int first = board.getNumOfRows() + 1;
 
         try {
 
@@ -15,7 +14,7 @@ public class RandomLabyrinthGenerator {
 
 
             for (int i = first + 1; i < board.getBoard().size() - first; i++) {
-                if (board.getBoard().get(i).isWall()) {
+                if (board.getBoard().get(i).isWall() || board.getBoard().get(i).isEdge()) {
                     continue;
                 }
 
@@ -36,18 +35,58 @@ public class RandomLabyrinthGenerator {
                         right.setWall(false);
                         right.setNothing(false);
                     }
-                }else{
-                    if (board.getBoard().get(i).getId().x < half) {
-
-                        generateFirstHalf(board, numOfWalls, numOfOccupied, right, down, i);
-
-                    } else {
-
-                        generateSecondHalf(board, numOfWalls, numOfOccupied, right, down, i);
+                }if (numOfWalls == 2) {
+                    if (numOfOccupied == 2) {
+                        right.setNothing(false);
+                        right.setWall(false);
+                        down.setNothing(false);
+                        down.setWall(false);
+                    } else if (numOfOccupied == 3) {
+                        if(right.isWall()){
+                            down.setWall(false);
+                            down.setNothing(false);
+                        }else{
+                            right.setWall(false);
+                            right.setNothing(false);
+                        }
+                    }
+                } else if (numOfWalls == 1) {
+                    if (numOfOccupied == 3) {
+                        if (right.isWall()) {
+                            down.setWall(false);
+                            down.setNothing(false);
+                        } else if (down.isWall()) {
+                            right.setWall(false);
+                            right.setNothing(false);
+                        } else {
+                            right.setWall(generate());
+                            right.setNothing(false);
+                        }
+                    } else if (numOfOccupied == 2) {
+                        right.setWall(generate());
+                        right.setNothing(false);
+                        down.setNothing(false);
+                        if (right.isWall()) {
+                            down.setWall(false);
+                        } else {
+                            down.setWall(generate());
+                        }
+                    }
+                } else if (numOfWalls == 0) {
+                    if (numOfOccupied == 2) {
+                        right.setWall(generate());
+                        right.setNothing(false);
+                        down.setNothing(false);
+                        if (right.isWall()) {
+                            down.setWall(false);
+                        } else {
+                            down.setWall(generate());
+                        }
+                    } else if (numOfOccupied == 3) {
+                        right.setWall(true);
+                        right.setNothing(false);
                     }
                 }
-
-
             }
         } catch (NeighbourNotFoundException e) {
             System.out.println("Damn....");
@@ -55,14 +94,6 @@ public class RandomLabyrinthGenerator {
         }
 
         return board;
-    }
-
-    static int calculateHalf(Board board){
-        if (board.getBoard().size() / 2 == 0) {
-            return board.getNumOfRows()/2;
-        } else {
-            return board.getNumOfRows() / 2 + 1;
-        }
     }
 
     static void generateFirstTiles(Tile right, Tile down){
@@ -80,118 +111,9 @@ public class RandomLabyrinthGenerator {
         }
 
     }
-
-    static void generateFirstHalf(Board board, int numOfWalls, int numOfOccupied, Tile right, Tile down, int i){
-
-        if (numOfWalls == 2) {
-            if (numOfOccupied == 2) {
-                right.setNothing(false);
-                right.setWall(false);
-                down.setNothing(false);
-                down.setWall(false);
-            } else if (numOfOccupied == 3) {
-                if (right.isWall()) {
-                    down.setNothing(false);
-                    down.setWall(false);
-                } else if (down.isWall()) {
-                    right.setWall(false);
-                    right.setNothing(false);
-                } else {
-                    right.setWall(generate());
-                    right.setNothing(false);
-                }
-            }
-        } else if (numOfWalls == 1) {
-            if (numOfOccupied == 3) {
-                if (right.isWall()) {
-                    down.setWall(generate());
-                    down.setNothing(false);
-                } else {
-                    right.setWall(generate());
-                    right.setNothing(false);
-                }
-            } else if (numOfOccupied == 2) {
-                right.setWall(generate());
-                right.setNothing(false);
-                down.setNothing(false);
-                if (right.isWall()) {
-                    down.setWall(false);
-                } else {
-                    down.setWall(generate());
-                }
-            }
-        } else if (numOfWalls == 0) {
-            if (numOfOccupied == 2) {
-                right.setWall(generate());
-                right.setNothing(false);
-                down.setNothing(false);
-                if (right.isWall()) {
-                    down.setWall(generate());
-                } else {
-                    down.setWall(true);
-                }
-            } else if (numOfOccupied == 3) {
-                right.setWall(generate());
-                right.setNothing(false);
-            }
-        }
-
-    }
-
     static void generateSecondHalf(Board board, int numOfWalls, int numOfOccupied, Tile right, Tile down, int i){
 
-        if (numOfWalls == 2) {
-            if (numOfOccupied == 2) {
-                right.setNothing(false);
-                right.setWall(false);
-                down.setNothing(false);
-                down.setWall(false);
-            } else if (numOfOccupied == 3) {
-                if(right.isWall()){
-                    down.setWall(false);
-                    down.setNothing(false);
-                }else{
-                    right.setWall(false);
-                    right.setNothing(false);
-                }
-            }
-        } else if (numOfWalls == 1) {
-            if (numOfOccupied == 3) {
-                if (right.isWall()) {
-                    down.setWall(false);
-                    down.setNothing(false);
-                } else if (down.isWall()) {
-                    right.setWall(false);
-                    right.setNothing(false);
-                } else {
-                    right.setWall(generate());
-                    right.setNothing(false);
-                }
-            } else if (numOfOccupied == 2) {
-                right.setWall(generate());
-                right.setNothing(false);
-                down.setNothing(false);
-                if (right.isWall()) {
-                    down.setWall(false);
-                } else {
-                    down.setWall(generate());
-                }
-            }
-        } else if (numOfWalls == 0) {
-            if (numOfOccupied == 2) {
-                right.setWall(generate());
-                right.setNothing(false);
-                down.setNothing(false);
-                if (right.isWall()) {
-                    down.setWall(false);
-                } else {
-                    down.setWall(generate());
-                }
-            } else if (numOfOccupied == 3) {
-                right.setWall(true);
-                right.setNothing(false);
-            }
-        }
+
     }
 
     static Tile findNeighbor(Coordinates current, Board board) throws NeighbourNotFoundException {
